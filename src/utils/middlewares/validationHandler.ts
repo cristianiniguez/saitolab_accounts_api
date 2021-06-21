@@ -2,6 +2,7 @@ import { Handler, Request } from 'express';
 import { Schema } from 'joi';
 import boom from '@hapi/boom';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validate = (data: any, schema: Schema) => {
   const { error } = schema.validate(data);
   return error;

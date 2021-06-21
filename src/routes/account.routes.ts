@@ -1,20 +1,20 @@
 import { Router } from 'express';
+import Joi from 'joi';
 
-import AccountsService from '../service/account.service';
+import AccountService from '../service/account.service';
 import {
   accountIdSchema,
   accountCreateSchema,
   accountUpdateSchema,
 } from '../utils/schemas/account.schema';
 import validationHandler from '../utils/middlewares/validationHandler';
-import Joi from 'joi';
 
 const router = Router();
-const accountsService = new AccountsService();
+const accountService = new AccountService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const accounts = await accountsService.getAccounts();
+    const accounts = await accountService.getAccounts();
     res.status(200).json({
       message: 'accounts listed',
       accounts,
@@ -31,7 +31,7 @@ router.get(
     const { id } = req.params;
 
     try {
-      const account = await accountsService.getAccount(id);
+      const account = await accountService.getAccount(id);
       res.status(200).json({
         message: 'account listed',
         account,
@@ -46,7 +46,7 @@ router.post('/', validationHandler(accountCreateSchema), async (req, res, next) 
   const data = req.body;
 
   try {
-    const account = await accountsService.createAccount(data);
+    const account = await accountService.createAccount(data);
     res.status(201).json({
       message: 'account created',
       account,
@@ -65,7 +65,7 @@ router.put(
     const data = req.body;
 
     try {
-      const accountId = await accountsService.updateAccount(id, data);
+      const accountId = await accountService.updateAccount(id, data);
       res.status(200).json({
         message: 'account updated',
         account: {
@@ -85,7 +85,7 @@ router.delete(
     const { id } = req.params;
 
     try {
-      const accountId = await accountsService.deleteAccount(id);
+      const accountId = await accountService.deleteAccount(id);
       res.status(200).json({
         message: 'account deleted',
         account: {

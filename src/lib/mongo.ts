@@ -9,7 +9,7 @@ const NAME = config.db.name;
 
 const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${HOST}/${NAME}?retryWrites=true&w=majority`;
 
-class MongoLib {
+class MongoLib<T> {
   private static db: Promise<Db>;
 
   private client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -30,23 +30,24 @@ class MongoLib {
     return MongoLib.db;
   }
 
-  public getAll(collection: string, query?: FilterQuery<any>) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public getAll(collection: string, query?: FilterQuery<any>): Promise<T[]> {
     return this.connect().then((db) => db.collection(collection).find(query).toArray());
   }
 
-  public get(collection: string, id: string) {
+  public get(collection: string, id: string): Promise<T> {
     return this.connect().then((db) =>
       db.collection(collection).findOne({ _id: new ObjectID(id) }),
     );
   }
 
-  public create(collection: string, data: any) {
+  public create(collection: string, data: T): Promise<T> {
     return this.connect()
       .then((db) => db.collection(collection).insertOne(data))
       .then((result) => result.insertedId);
   }
 
-  public update(collection: string, id: string, data: any) {
+  public update(collection: string, id: string, data: Partial<T>): Promise<string> {
     return this.connect()
       .then((db) =>
         db
@@ -56,7 +57,7 @@ class MongoLib {
       .then(() => id);
   }
 
-  public delete(collection: string, id: string) {
+  public delete(collection: string, id: string): Promise<string> {
     return this.connect()
       .then((db) => db.collection(collection).deleteOne({ _id: new ObjectID(id) }))
       .then(() => id);

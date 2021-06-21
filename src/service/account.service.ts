@@ -1,9 +1,9 @@
 import MongoLib from '../lib/mongo';
 import { Account } from '../types';
 
-class AccountsService {
+class AccountService {
   private collection = 'accounts';
-  private mongoDB = new MongoLib();
+  private mongoDB = new MongoLib<Account>();
 
   public async getAccounts(): Promise<Account[]> {
     const accounts = await this.mongoDB.getAll(this.collection);
@@ -31,4 +31,4 @@ class AccountsService {
   }
 }
 
-export default AccountsService;
+export default AccountService;
