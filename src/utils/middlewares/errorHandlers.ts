@@ -7,7 +7,7 @@ const { dev } = config;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const withErrorStack = (error: any, stack: any) => {
-  return dev ? { error, stack } : error;
+  return dev ? { error, stack } : { error };
 };
 
 export const logErrors: ErrorRequestHandler = (err, req, res, next) => {
@@ -22,10 +22,10 @@ export const wrapErrors: ErrorRequestHandler = (err, req, res, next) => {
   next(err);
 };
 
-export const errorHandlers: ErrorRequestHandler = (err, req, res) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const errorHandlers: ErrorRequestHandler = (err, req, res, next) => {
   const {
     output: { statusCode, payload },
   } = err;
-  res.status(statusCode);
-  res.json(withErrorStack(payload, err.stack));
+  res.status(statusCode).json(withErrorStack(payload, err.stack));
 };

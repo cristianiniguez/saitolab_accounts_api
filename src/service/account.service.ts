@@ -2,7 +2,7 @@ import MongoLib from '../lib/mongo';
 import { Account } from '../types';
 
 class AccountService {
-  private collection = 'accounts';
+  private collection = 'account';
   private mongoDB = new MongoLib<Account>();
 
   public async getAccounts(): Promise<Account[]> {
