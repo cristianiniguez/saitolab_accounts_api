@@ -1,32 +1,40 @@
-import MongoLib from '../lib/mongo';
+import { Document } from 'mongoose';
+
+import MoveModel from '../models/move.model';
 import { Move } from '../types';
 
 class MoveService {
-  private collection = 'move';
-  private mongoDB = new MongoLib<Move>();
-
-  public async getMoves(): Promise<Move[]> {
-    const moves = await this.mongoDB.getAll(this.collection);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async getMoves(): Promise<(Move & Document<any, any, Move>)[]> {
+    const moves = await MoveModel.find().exec();
     return moves;
   }
 
-  public async getMove(id: string): Promise<Move> {
-    const move = await this.mongoDB.get(this.collection, id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async getMove(id: string): Promise<(Move & Document<any, any, Move>) | null> {
+    const move = await MoveModel.findById(id).exec();
     return move;
   }
 
-  public async createMove(data: Move): Promise<Move> {
-    const move = await this.mongoDB.create(this.collection, data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async createMove(data: Move): Promise<Move & Document<any, any, Move>> {
+    const move = new MoveModel(data);
+    await move.save();
     return move;
   }
 
-  public async updateMove(id: string, data: Partial<Move>): Promise<string> {
-    const move = await this.mongoDB.update(this.collection, id, data);
+  public async updateMove(
+    id: string,
+    data: Partial<Move>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<(Move & Document<any, any, Move>) | null> {
+    const move = await MoveModel.findByIdAndUpdate(id, { $set: data }, { new: true }).exec();
     return move;
   }
 
-  public async deleteMove(id: string): Promise<string> {
-    const move = await this.mongoDB.delete(this.collection, id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async deleteMove(id: string): Promise<(Move & Document<any, any, Move>) | null> {
+    const move = await MoveModel.findByIdAndDelete(id).exec();
     return move;
   }
 }

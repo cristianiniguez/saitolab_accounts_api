@@ -1,32 +1,40 @@
-import MongoLib from '../lib/mongo';
+import { Document } from 'mongoose';
+
+import AccountModel from '../models/account.model';
 import { Account } from '../types';
 
 class AccountService {
-  private collection = 'account';
-  private mongoDB = new MongoLib<Account>();
-
-  public async getAccounts(): Promise<Account[]> {
-    const accounts = await this.mongoDB.getAll(this.collection);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async getAccounts(): Promise<(Account & Document<any, any, Account>)[]> {
+    const accounts = await AccountModel.find().exec();
     return accounts;
   }
 
-  public async getAccount(id: string): Promise<Account> {
-    const account = await this.mongoDB.get(this.collection, id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async getAccount(id: string): Promise<(Account & Document<any, any, Account>) | null> {
+    const account = await AccountModel.findById(id).exec();
     return account;
   }
 
-  public async createAccount(data: Account): Promise<Account> {
-    const account = await this.mongoDB.create(this.collection, data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async createAccount(data: Account): Promise<Account & Document<any, any, Account>> {
+    const account = new AccountModel(data);
+    await account.save();
     return account;
   }
 
-  public async updateAccount(id: string, data: Partial<Account>): Promise<string> {
-    const account = await this.mongoDB.update(this.collection, id, data);
+  public async updateAccount(
+    id: string,
+    data: Partial<Account>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<(Account & Document<any, any, Account>) | null> {
+    const account = await AccountModel.findByIdAndUpdate(id, { $set: data }, { new: true }).exec();
     return account;
   }
 
-  public async deleteAccount(id: string): Promise<string> {
-    const account = await this.mongoDB.delete(this.collection, id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async deleteAccount(id: string): Promise<(Account & Document<any, any, Account>) | null> {
+    const account = await AccountModel.findByIdAndDelete(id).exec();
     return account;
   }
 }

@@ -15,10 +15,7 @@ const accountService = new AccountService();
 router.get('/', async (req, res, next) => {
   try {
     const accounts = await accountService.getAccounts();
-    res.status(200).json({
-      message: 'accounts listed',
-      accounts,
-    });
+    res.status(200).json({ message: 'accounts listed', accounts });
   } catch (error) {
     next(error);
   }
@@ -32,10 +29,7 @@ router.get(
 
     try {
       const account = await accountService.getAccount(id);
-      res.status(200).json({
-        message: 'account listed',
-        account,
-      });
+      res.status(200).json({ message: 'account listed', account });
     } catch (error) {
       next(error);
     }
@@ -47,10 +41,7 @@ router.post('/', validationHandler(accountCreateSchema), async (req, res, next) 
 
   try {
     const account = await accountService.createAccount(data);
-    res.status(201).json({
-      message: 'account created',
-      account,
-    });
+    res.status(201).json({ message: 'account created', account });
   } catch (error) {
     next(error);
   }
@@ -65,13 +56,8 @@ router.put(
     const data = req.body;
 
     try {
-      const accountId = await accountService.updateAccount(id, data);
-      res.status(200).json({
-        message: 'account updated',
-        account: {
-          id: accountId,
-        },
-      });
+      const account = await accountService.updateAccount(id, data);
+      res.status(200).json({ message: 'account updated', account });
     } catch (error) {
       next(error);
     }
@@ -85,13 +71,8 @@ router.delete(
     const { id } = req.params;
 
     try {
-      const accountId = await accountService.deleteAccount(id);
-      res.status(200).json({
-        message: 'account deleted',
-        account: {
-          id: accountId,
-        },
-      });
+      const account = await accountService.deleteAccount(id);
+      res.status(200).json({ message: 'account deleted', account });
     } catch (error) {
       next(error);
     }
