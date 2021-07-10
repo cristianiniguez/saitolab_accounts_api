@@ -2,17 +2,16 @@ import { Db, FilterQuery, MongoClient, ObjectID } from 'mongodb';
 
 import config from '../config';
 
-const USER = encodeURIComponent(config.db.user as string);
-const PASSWORD = encodeURIComponent(config.db.password as string);
-const HOST = config.db.host;
+const MONGO_URI = config.db.uri as string;
 const NAME = config.db.name;
-
-const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${HOST}/${NAME}?retryWrites=true&w=majority`;
 
 class MongoLib<T> {
   private static db: Promise<Db>;
 
-  private client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+  private client = new MongoClient(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   private dbName = NAME as string;
 
   private connect() {
