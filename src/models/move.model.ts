@@ -4,7 +4,7 @@ import { Move } from '../types';
 
 const moveSchema = new Schema<Move>({
   title: { type: String, required: true },
-  accountId: { type: Schema.Types.ObjectId },
+  accountId: Schema.Types.ObjectId,
   date: { type: Date, required: true },
   value: { type: Number, required: true },
   type: { type: String, required: true },

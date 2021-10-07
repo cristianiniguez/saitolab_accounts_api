@@ -4,6 +4,8 @@ import morgan from 'morgan';
 
 import accountRoutes from './routes/account.routes';
 import moveRoutes from './routes/move.routes';
+import authRoutes from './routes/auth.routes';
+
 import notFoundHandler from './utils/middlewares/notFoundHandler';
 import { logErrors, wrapErrors, errorHandlers } from './utils/middlewares/errorHandlers';
 
@@ -15,6 +17,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use('/api/auth', authRoutes);
 app.use('/api/account', accountRoutes);
 app.use('/api/move', moveRoutes);
 
