@@ -19,6 +19,11 @@ class UserService {
     const createdUserId = await newUser.save();
     return createdUserId;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async getUserByEmail(email: string): Promise<(Document<any, any, User> & User) | null> {
+    return await UserModel.findOne({ email }).exec();
+  }
 }
 
 export default UserService;

@@ -11,6 +11,7 @@ const config = {
     uri: process.env.DB_URI,
     name: process.env.DB_NAME,
   },
+  authJwtSecret: process.env.AUTH_JWT_SECRET as string,
 };
 
 export default config;
